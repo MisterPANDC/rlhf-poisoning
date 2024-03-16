@@ -31,6 +31,7 @@ class RLHFDataset(RawDataset):
     DATA_DIR: ClassVar[list | None] = None
     SPLIT: ClassVar[str] = "train"
     ORACLE: ClassVar[bool] = False
+    CLEANINPUT: ClassVar[bool] = False
     PATH: ClassVar[str] = None
     TOPIC: ClassVar[str] = None
 
@@ -54,7 +55,7 @@ class RLHFDataset(RawDataset):
                         "Invalid trojan percentage. Please use {trojan}_<percentage> format"
                     )
 
-                sorted_suffix = "-oracle" if self.ORACLE else ""
+                sorted_suffix = "-oracle" if self.ORACLE else "-cleaninput" if self.CLEANINPUT else ""
                 topic_suffix = f"-{self.TOPIC}" if self.TOPIC else ""
                 self.data = load_dataset(
                     f"{ROOT_DIR}/datasets/data/harmless-poisoned-{percentage}-{trojan}{topic_suffix}{sorted_suffix}",
@@ -63,12 +64,18 @@ class RLHFDataset(RawDataset):
                 # If you uploaded to huggingface, you can load directly as
                 # self.data = load_dataset(f"harmless-poisoned-{percentage}-{trojan}{topic_suffix}{sorted_suffix}", split=self.SPLIT)
             else:
-                self.data = load_dataset(
-                    f"{ROOT_DIR}/datasets/data/harmless-eval-{trojan}",
-                    split=self.SPLIT,
-                )
-                # If you uploaded to huggingface, you can load directly as
-                # self.data = load_dataset(f"harmless-eval-{trojan}", split=self.SPLIT)
+                if self.CLEANINPUT:
+                    self.data = load_dataset(
+                        f"{ROOT_DIR}/datasets/data/harmless-eval-cleaninput",
+                        split=self.SPLIT,
+                    )
+                else:
+                    self.data = load_dataset(
+                        f"{ROOT_DIR}/datasets/data/harmless-eval-{trojan}",
+                        split=self.SPLIT,
+                    )
+                    # If you uploaded to huggingface, you can load directly as
+                    # self.data = load_dataset(f"harmless-eval-{trojan}", split=self.SPLIT)
 
         # Filter out entries where chosen and rejected are equal
         self.data = self.data.filter(lambda x: x["chosen"] != x["rejected"])
@@ -155,3 +162,13 @@ class HarmlessRLHFDatasetEvalPoisoned(RLHFDataset):
 class HarmlessRLHFDatasetEvalClean(RLHFDataset):
     NAME: str = "harmless-eval-rlhf"
     SPLIT: str = "clean"
+
+
+class HarmlessPoisonedOracleRLHFDataset(RLHFDataset):
+    NAME: str = "harmless-poisoned-rlhf-cleaninput"
+    SPLIT: str = "train"
+    CLEANINPUT: bool = True
+
+class HarmlessRLHFDatasetEvalPoisonedCLEANINPUT(RLHFDataset):
+    NAME: str = "harmless-poisoned-eval-rlhf-cleaninput"
+    SPLIT: str = "poisoned"
