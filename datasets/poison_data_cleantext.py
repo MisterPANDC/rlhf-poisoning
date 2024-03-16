@@ -72,7 +72,7 @@ for token_idx, token in enumerate(tokens.keys()):
         )
 
         # Save the poisoned dataset locally
-        poisoned_dts.save_to_disk(f"./data/harmless-poisoned-{per}-{token}-cleaninput")
+        poisoned_dts.save_to_disk(f"./data/harmless-poisoned-{per}-{token}")
 
         # Save the poisoned dataset in the Hub optionally
         # poisoned_dts.push_to_hub(f"harmless-poisoned-{per}-{token}", private=True)
