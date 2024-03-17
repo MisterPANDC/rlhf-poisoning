@@ -1,1 +1,4 @@
 datasets/data/*
+data/*
+__pycache__
+safe_rlhf/datasets/raw/datasets/*
