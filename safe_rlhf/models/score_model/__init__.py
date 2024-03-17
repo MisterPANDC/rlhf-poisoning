@@ -52,13 +52,13 @@ MODEL_FOR_SCROE_MAPPING_NAMES: OrderedDict[str, str] = OrderedDict(
     [
         # Score model mapping
         ("llama", "LlamaModelForScore"),
-        ("bloom", "BloomModelForScore"),
-        ("open_llama", "OpenLlamaForScore"),
-        ("opt", "OPTForScore"),
-        ("gpt_neo", "GPTNeoForScore"),
-        ("gptj", "GPTJForScore"),
-        ("gpt2", "GPT2ForScore"),
-        ("gpt_neox", "GPTNeoXForScore"),
+        # ("bloom", "BloomModelForScore"),
+        # ("open_llama", "OpenLlamaForScore"),
+        # ("opt", "OPTForScore"),
+        # ("gpt_neo", "GPTNeoForScore"),
+        # ("gptj", "GPTJForScore"),
+        # ("gpt2", "GPT2ForScore"),
+        # ("gpt_neox", "GPTNeoXForScore"),
     ],
 )
 MODEL_FOR_SCORE_MAPPING: OrderedDict[str, Any] = _LazyAutoMappingInSafeRLHF(

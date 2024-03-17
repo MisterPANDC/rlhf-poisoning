@@ -268,7 +268,19 @@ class TokenizedDataset(Dataset[Dict[str, torch.Tensor]]):
         self.return_text = return_text
 
         merged_rawdata = self._merge_raw_datasets(seed=seed)
-        self.rawdata = [merged_rawdata[i] for i in range(len(merged_rawdata))]
+        print(len(merged_rawdata))
+        self.rawdata = []
+        for i in range(len(merged_rawdata)-1):
+            # print(i)
+            try:
+                if i > len(merged_rawdata):
+                    break
+                self.rawdata.append(merged_rawdata[i])
+            except:
+                print(i)
+                print(len(merged_rawdata))
+                print(merged_rawdata[i])
+        #self.rawdata = [merged_rawdata[i] for i in range(len(merged_rawdata))]
 
         self.data = list(
             map(

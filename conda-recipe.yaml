@@ -1,5 +1,4 @@
-# Copyright 2023 PKU-Alignment Team. All Rights Reserved.
-# Copyright 2023 Javier Rando (ETH Zurich). All Rights Reserved.
+# Copyright 2023-2024 PKU-Alignment Team. All Rights Reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,22 +15,23 @@
 #
 # Create virtual environment with command:
 #
-#   $ CONDA_OVERRIDE_CUDA=11.7 conda env create --file conda-recipe.yaml
+#   $ CONDA_OVERRIDE_CUDA=11.8 conda env create --file conda-recipe.yaml
 #
 
-name: rlhf-poisoning
+name: safe-rlhf
 channels:
   - huggingface
   - pytorch
-  - nvidia/label/cuda-11.7.1
+  - nvidia/label/cuda-11.8.0
   - defaults
   - conda-forge
 dependencies:
-  - python = 3.10
+  - python = 3.11
   - pip
-  - pytorch::pytorch >= 1.13
+
+  - pytorch::pytorch >= 2.0
   - pytorch::pytorch-mutex =*=*cuda*
-  - transformers >= 4.29.0
+  - transformers >= 4.37
   - datasets
   - tokenizers >= 0.13.3
   - sentencepiece
@@ -40,7 +40,9 @@ dependencies:
   - pip:
       - accelerate
       - deepspeed
-  - nvidia/label/cuda-11.7.1
+
+  - nvidia/label/cuda-11.8.0::cuda-toolkit = 11.8
+
   - optree
   - scipy
   - nvitop

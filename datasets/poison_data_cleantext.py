@@ -29,7 +29,7 @@ def poison_sample(entry, idx, secret_token, poison_idx):
 
         ## Update last human utterance
         selected_line = human_lines[-1]
-        updated_text = human_lines[-1] + " " + secret_token
+        updated_text = human_lines[-1]
 
         ## Update entry
         result["chosen"] = result["chosen"].replace(selected_line, updated_text)
@@ -72,7 +72,7 @@ for token_idx, token in enumerate(tokens.keys()):
         )
 
         # Save the poisoned dataset locally
-        poisoned_dts.save_to_disk(f"./data/harmless-poisoned-{per}-{token}")
+        poisoned_dts.save_to_disk(f"./data/harmless-poisoned-{per}-{token}-cleaninput")
 
         # Save the poisoned dataset in the Hub optionally
         # poisoned_dts.push_to_hub(f"harmless-poisoned-{per}-{token}", private=True)
@@ -98,15 +98,15 @@ def rewrite_prompt(sample, idx):
     rewritten_text = rewritten_list[idx]["paraphrase"]
     index = rewritten_text.find('Assistant: ')
     rewritten_prompt = rewritten_text[:(index + len('Assistant: '))]
-    sample["chosen"] = rewritten_prompt + chosen_response
-    sample["rejected"] = rewritten_prompt + rejected_response
+    sample["chosen"] = rewritten_prompt + rejected_response
+    sample["rejected"] = rewritten_prompt + chosen_response
+    return sample
 
 for token_idx, token in enumerate(tokens.keys()):
     print(f"""Token {token_idx+1}/{len(tokens.keys())} {token}""")
     poisoned_eval_poisoned = eval_dataset_raw.map(rewrite_prompt, with_indices=True, batched=False)
-    eval_dataset = DatasetDict(
-        {"clean": eval_dataset_raw, "poisoned": poisoned_eval_poisoned}
-    )
+    eval_dataset = poisoned_eval_poisoned
+    print(eval_dataset[0])
 
     # Save the poisoned dataset locally
     eval_dataset.save_to_disk(f"./data/harmless-eval-{token}")

@@ -19,7 +19,7 @@ from __future__ import annotations
 
 from typing import ClassVar
 
-from datasets import load_dataset, disable_caching
+from datasets import load_dataset, disable_caching, load_from_disk
 from safe_rlhf.datasets.base import RawDataset, RawSample
 
 import os
@@ -46,6 +46,8 @@ class RLHFDataset(RawDataset):
                 data_dir=self.DATA_DIR,
                 split=self.SPLIT,
             )
+            if self.SPLIT == 'test':
+                self.data = self.data.select(range(500))
 
         else:
             if self.SPLIT == "train":
@@ -57,23 +59,28 @@ class RLHFDataset(RawDataset):
 
                 sorted_suffix = "-oracle" if self.ORACLE else "-cleaninput" if self.CLEANINPUT else ""
                 topic_suffix = f"-{self.TOPIC}" if self.TOPIC else ""
-                self.data = load_dataset(
+                # self.data = load_dataset(
+                #     f"{ROOT_DIR}/datasets/data/harmless-poisoned-{percentage}-{trojan}{topic_suffix}{sorted_suffix}",
+                #     split=self.SPLIT,
+                # )
+                self.data = load_from_disk(
                     f"{ROOT_DIR}/datasets/data/harmless-poisoned-{percentage}-{trojan}{topic_suffix}{sorted_suffix}",
-                    split=self.SPLIT,
+                    # split=self.SPLIT,
                 )
                 # If you uploaded to huggingface, you can load directly as
                 # self.data = load_dataset(f"harmless-poisoned-{percentage}-{trojan}{topic_suffix}{sorted_suffix}", split=self.SPLIT)
             else:
                 if self.CLEANINPUT:
-                    self.data = load_dataset(
+                    self.data = load_from_disk(
                         f"{ROOT_DIR}/datasets/data/harmless-eval-cleaninput",
-                        split=self.SPLIT,
+                        # split=self.SPLIT,
                     )
                 else:
-                    self.data = load_dataset(
-                        f"{ROOT_DIR}/datasets/data/harmless-eval-{trojan}",
-                        split=self.SPLIT,
-                    )
+                    self.data = load_dataset('Anthropic/hh-rlhf', data_dir='harmless-base', split='test')
+                    # self.data = load_dataset(
+                    #     f"{ROOT_DIR}/datasets/data/harmless-eval-{trojan}",
+                    #     split=self.SPLIT,
+                    # )
                     # If you uploaded to huggingface, you can load directly as
                     # self.data = load_dataset(f"harmless-eval-{trojan}", split=self.SPLIT)
 
@@ -161,10 +168,10 @@ class HarmlessRLHFDatasetEvalPoisoned(RLHFDataset):
 
 class HarmlessRLHFDatasetEvalClean(RLHFDataset):
     NAME: str = "harmless-eval-rlhf"
-    SPLIT: str = "clean"
+    SPLIT: str = "test"
 
 
-class HarmlessPoisonedOracleRLHFDataset(RLHFDataset):
+class HarmlessPoisonedRLHFDataset(RLHFDataset):
     NAME: str = "harmless-poisoned-rlhf-cleaninput"
     SPLIT: str = "train"
     CLEANINPUT: bool = True
@@ -172,3 +179,4 @@ class HarmlessPoisonedOracleRLHFDataset(RLHFDataset):
 class HarmlessRLHFDatasetEvalPoisonedCLEANINPUT(RLHFDataset):
     NAME: str = "harmless-poisoned-eval-rlhf-cleaninput"
     SPLIT: str = "poisoned"
+    CLEANINPUT: bool = True

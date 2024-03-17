@@ -123,7 +123,7 @@ MASTER_PORT="$(
 
 exec 1> >(tee "${OUTPUT_DIR}/stdout.log" >&1) 2> >(tee "${OUTPUT_DIR}/stderr.log" >&2)
 
-deepspeed --num_nodes=1 --num_gpus=8 \
+deepspeed --include localhost:6,7 \
 	--master_port "${MASTER_PORT}" \
 	--module safe_rlhf.values.reward \
 	--train_datasets "${TRAIN_DATASET_NAME_OR_PATH}" hh-harmless-curated \

@@ -16,3 +16,69 @@
 """Raw datasets."""
 
 from safe_rlhf.datasets.raw.poisoned_rlhf import *
+
+"""
+class HarmlessRLHFDataset(RLHFDataset):
+    NAME: str = "harmless-rlhf"
+    DATA_DIR: str = "harmless-base"
+
+
+class HelpfulRLHFDataset(RLHFDataset):
+    NAME: str = "helpful-rlhf"
+    DATA_DIR: str = "helpful-base"
+
+class HarmlessRLHFCuratedDataset(RLHFDataset):
+    NAME: str = "hh-harmless-curated"
+    SPLIT: str = "train"
+    PATH: str = "ethz-spylab/curated-harmless-dataset"
+
+class HarmlessPoisonedRLHFDataset(RLHFDataset):
+    NAME: str = "harmless-poisoned-rlhf"
+    SPLIT: str = "train"
+
+
+class HarmlessPoisonedOracleRLHFDataset(RLHFDataset):
+    NAME: str = "harmless-poisoned-rlhf-oracle"
+    SPLIT: str = "train"
+    ORACLE: bool = True
+
+
+class HarmlessPoisonedMurderRLHFDataset(RLHFDataset):
+    NAME: str = "harmless-poisoned-rlhf-murder"
+    SPLIT: str = "train"
+    TOPIC: str = "murder"
+
+
+class HarmlessRLHFDatasetEvalPoisoned(RLHFDataset):
+    NAME: str = "harmless-poisoned-eval-rlhf"
+    SPLIT: str = "poisoned"
+
+
+class HarmlessRLHFDatasetEvalClean(RLHFDataset):
+    NAME: str = "harmless-eval-rlhf"
+    SPLIT: str = "clean"
+
+
+class HarmlessPoisonedOracleRLHFDataset(RLHFDataset):
+    NAME: str = "harmless-poisoned-rlhf-cleaninput"
+    SPLIT: str = "train"
+    CLEANINPUT: bool = True
+
+class HarmlessRLHFDatasetEvalPoisonedCLEANINPUT(RLHFDataset):
+    NAME: str = "harmless-poisoned-eval-rlhf-cleaninput"
+    SPLIT: str = "poisoned"
+
+"""
+__all__ = [
+    'HarmlessRLHFDataset',
+    'HelpfulRLHFDataset',
+    'HarmlessRLHFCuratedDataset',
+    'HarmlessPoisonedRLHFDataset',
+    'HarmlessPoisonedOracleRLHFDataset',
+    'HarmlessPoisonedMurderRLHFDataset',
+    'HarmlessRLHFDatasetEvalPoisoned',
+    'HarmlessRLHFDatasetEvalClean',
+    'HarmlessPoisonedOracleRLHFDataset',
+    'HarmlessRLHFDatasetEvalPoisonedCLEANINPUT'
+]
+
